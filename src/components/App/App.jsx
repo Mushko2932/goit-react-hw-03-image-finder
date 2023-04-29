@@ -2,6 +2,7 @@ import { Component } from "react";
 import { ImageGallery } from "components/ImageGallery/ImageGallery";
 import { SearchBar } from "components/Searchbar/Searchbar";
 import { fetchImgList } from "services/Api";
+import { Loader } from "components/Loader/Loader";
 
 export class App extends Component {
   state = {
@@ -41,6 +42,7 @@ export class App extends Component {
         <ImageGallery items={images} />
         <SearchBar onSubmit={console.log} />
         {error && <p>Help...</p>}
+        <Loader/>
       </div>
     );
   }
