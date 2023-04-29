@@ -1,16 +1,32 @@
 import { Component } from "react";
 import { ImageGallery } from "components/ImageGallery/ImageGallery";
+import { SearchBar } from "components/Searchbar/Searchbar";
+import { fetchImgList } from "services/Api";
 
 export class App extends Component {
-  // state = {
-  //   page,
-  // }
+  state = {
+    images: [],
+    page: 0,
+    totalPages: 0,
+    query: '',
+    isLoading: false,
+    error: false,
+    showLoadMoreButton: true,
+  };
 
-  componentDidMount = () => {
-    
+  async componentDidMount() {
+    try {
+      this.setState({ isLoading: true });
+      const fetchedImg = await fetchImgList();
+      this.setState({ images: fetchedImg, isLoading: false });
+    } catch (error) {
+      console.log('error :>> ', error);
+      this.setState({error: true, isLoading: false})
+    }
   }
-  
+
   render() {
+    const { images, error } = this.state;
     return (
       <div
         style={{
@@ -22,9 +38,10 @@ export class App extends Component {
           color: '#010101',
         }}
       >
-        <ImageGallery />
+        <ImageGallery items={images} />
+        <SearchBar onSubmit={console.log} />
+        {error && <p>Help...</p>}
       </div>
     );
-    
-  };
+  }
 };

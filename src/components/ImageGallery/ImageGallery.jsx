@@ -1,16 +1,7 @@
-import { Component } from "react";
 
 
-export class ImageGallery extends Component {
-    async componentDidMount() {
-      try {
-        
-      } catch (error) {
-        
-      }
-    }
-    
-    render() {
-        return <ul className="gallery"></ul>;
-    }
+export const ImageGallery = ({items}) => {
+    return (<ul className="gallery">
+        {items.map(item => <li>{item}</li>)}
+    </ul>);
 }
