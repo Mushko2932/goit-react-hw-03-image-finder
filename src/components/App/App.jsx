@@ -5,6 +5,7 @@ import { SearchBar } from "components/Searchbar/Searchbar";
 import { fetchImgList } from "services/Api";
 import { Loader } from "components/Loader/Loader";
 import { Button } from "components/Button/Button";
+import { Modal } from "components/Modal/Modal";
 
 export class App extends Component {
   // static propTypes = {
@@ -17,6 +18,7 @@ export class App extends Component {
     page: 1,
     total: 0,
     isLoading: false,
+    showModal: false,
     error: false,
   };
 
@@ -42,8 +44,12 @@ export class App extends Component {
     });
   };
 
+  toggleModal = () => {
+    this.setState(state => ({ showModal: !state.showModal }));
+  }
+
   render() {
-    const { images, error } = this.state;
+    const { images, error, showModal, largeImageURL, alt } = this.state;
     return (
       <div
         style={{
@@ -59,7 +65,12 @@ export class App extends Component {
         <SearchBar onSubmit={this.handleSubmit} />
         {error && <p>Help...</p>}
         <Loader />
-        <Button/>
+        <Button />
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <img src={largeImageURL} alt={alt} />
+          </Modal>
+        )}
       </div>
     );
   }
