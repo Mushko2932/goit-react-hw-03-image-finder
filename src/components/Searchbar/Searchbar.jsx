@@ -1,6 +1,5 @@
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { nanoid } from "nanoid";
 
 const ContactShema = Yup.object().shape({
   name: Yup.string()
@@ -21,10 +20,7 @@ const state = {
 export const SearchBar = ({ onSubmit }) => {
   const handleSabmit = (values, actions) => {
     console.log('values :>> ', values);
-    onSubmit({
-      ...values,
-      id: nanoid(),
-    });
+    onSubmit(values);
     actions.resetForm();
   };
   return (
@@ -40,6 +36,7 @@ export const SearchBar = ({ onSubmit }) => {
 
         <Field
           className="input"
+          name="search"
           type="text"
           autoComplete="off"
           autoFocus

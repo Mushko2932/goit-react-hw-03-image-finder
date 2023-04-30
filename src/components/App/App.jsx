@@ -1,18 +1,22 @@
 import { Component } from "react";
+// import PropTypes from 'prop-types';
 import { ImageGallery } from "components/ImageGallery/ImageGallery";
 import { SearchBar } from "components/Searchbar/Searchbar";
 import { fetchImgList } from "services/Api";
 import { Loader } from "components/Loader/Loader";
 
 export class App extends Component {
+  // static propTypes = {
+  //   search: PropTypes.string.isRequired,
+  // };
+
   state = {
+    search: '',
     images: [],
-    page: 0,
-    totalPages: 0,
-    query: '',
+    page: 1,
+    total: 1,
     isLoading: false,
     error: false,
-    showLoadMoreButton: true,
   };
 
   async componentDidMount() {
@@ -22,9 +26,20 @@ export class App extends Component {
       this.setState({ images: fetchedImg, isLoading: false });
     } catch (error) {
       console.log('error :>> ', error);
-      this.setState({error: true, isLoading: false})
+      this.setState({ error: true, isLoading: false });
     }
   }
+
+  handleSubmit = search => {
+    this.setState({
+      search,
+      images: [],
+      page: 1,
+      total: 1,
+      isLoading: false,
+      error: false,
+    });
+  };
 
   render() {
     const { images, error } = this.state;
@@ -40,9 +55,9 @@ export class App extends Component {
         }}
       >
         <ImageGallery items={images} />
-        <SearchBar onSubmit={console.log} />
+        <SearchBar onSubmit={this.handleSubmit} />
         {error && <p>Help...</p>}
-        <Loader/>
+        <Loader />
       </div>
     );
   }

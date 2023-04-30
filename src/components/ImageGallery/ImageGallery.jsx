@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
 import { ImageGalleryItem } from "components/ImageGalleryItem/ImageGalleryItem";
 
-export const ImageGallery = ({items}) => {
-    return (
+export const ImageGallery = ({items}) =>  (
       <ul className="gallery">
-        <ImageGalleryItem items={items} />
+            <ImageGalleryItem items={items} />
       </ul>
     );
-}
+
 
 ImageGallery.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
