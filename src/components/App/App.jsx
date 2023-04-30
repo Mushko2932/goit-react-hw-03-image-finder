@@ -44,19 +44,24 @@ export class App extends Component {
     });
   };
 
+  loadMore = () => {
+    this.setState(prevSt => ({
+      page: prevSt.page + 1, 
+    }));
+  };
+
   toggleModal = () => {
     this.setState(state => ({ showModal: !state.showModal }));
-  }
+  };
 
   render() {
-    const { images, error, showModal, largeImageURL, alt } = this.state;
+    const { images, error, showModal, largeImageURL, alt, total, page } = this.state;
     return (
       <div
         style={{
           height: '100vh',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
           fontSize: 40,
           color: '#010101',
         }}
@@ -65,7 +70,7 @@ export class App extends Component {
         <SearchBar onSubmit={this.handleSubmit} />
         {error && <p>Help...</p>}
         <Loader />
-        <Button />
+        {total / 12 > page && <Button onClick={this.loadMore} />}
         {showModal && (
           <Modal onClose={this.toggleModal}>
             <img src={largeImageURL} alt={alt} />
