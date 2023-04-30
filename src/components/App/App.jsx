@@ -4,6 +4,7 @@ import { ImageGallery } from "components/ImageGallery/ImageGallery";
 import { SearchBar } from "components/Searchbar/Searchbar";
 import { fetchImgList } from "services/Api";
 import { Loader } from "components/Loader/Loader";
+import { Button } from "components/Button/Button";
 
 export class App extends Component {
   // static propTypes = {
@@ -14,7 +15,7 @@ export class App extends Component {
     search: '',
     images: [],
     page: 1,
-    total: 1,
+    total: 0,
     isLoading: false,
     error: false,
   };
@@ -58,6 +59,7 @@ export class App extends Component {
         <SearchBar onSubmit={this.handleSubmit} />
         {error && <p>Help...</p>}
         <Loader />
+        <Button/>
       </div>
     );
   }
