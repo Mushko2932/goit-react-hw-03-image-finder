@@ -1,5 +1,4 @@
 import { Component } from "react";
-// import PropTypes from 'prop-types';
 import { ImageGallery } from "components/ImageGallery/ImageGallery";
 import { SearchBar } from "components/Searchbar/Searchbar";
 import { fetchImgList } from "services/Api";
@@ -8,15 +7,11 @@ import { Button } from "components/Button/Button";
 import { Modal } from "components/Modal/Modal";
 
 export class App extends Component {
-  // static propTypes = {
-  //   search: PropTypes.string.isRequired,
-  // };
-
   state = {
     search: '',
     images: [],
     page: 1,
-    total: 0,
+    total: 1,
     isLoading: false,
     showModal: false,
     error: false,
@@ -26,12 +21,26 @@ export class App extends Component {
     try {
       this.setState({ isLoading: true });
       const fetchedImg = await fetchImgList();
-      this.setState({ images: fetchedImg, isLoading: false });
+      this.setState({
+        images: fetchedImg.hits,
+        total: fetchedImg.total,
+        isLoading: false,
+      });
     } catch (error) {
       console.log('error :>> ', error);
       this.setState({ error: true, isLoading: false });
     }
   }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (
+      prevState.search !== this.state.search ||
+      prevState.page !== this.state.page
+    ) {
+      fetchImgList();
+    }
+  }
+  
 
   handleSubmit = search => {
     this.setState({
@@ -55,21 +64,28 @@ export class App extends Component {
   };
 
   render() {
-    const { images, error, showModal, largeImageURL, alt, total, page } = this.state;
+    const {
+      isLoading,
+      images,
+      error,
+      showModal,
+      largeImageURL,
+      alt,
+      total,
+      page,
+    } = this.state;
     return (
       <div
         style={{
           height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
           fontSize: 40,
           color: '#010101',
         }}
       >
-        <ImageGallery items={images} />
         <SearchBar onSubmit={this.handleSubmit} />
+        <ImageGallery items={images} />
+        {isLoading && <Loader />}
         {error && <p>Help...</p>}
-        <Loader />
         {total / 12 > page && <Button onClick={this.loadMore} />}
         {showModal && (
           <Modal onClose={this.toggleModal}>
