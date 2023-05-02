@@ -13,9 +13,10 @@ const state = {
 };
 
 export const SearchBar = ({ onSubmit }) => {
-  const handleSabmit = (values, actions) => {
+  const handleSabmit = async (values, actions) => {
     console.log('values :>> ', values);
-    onSubmit(values);
+    await onSubmit(values);
+    actions.setSubmitting(false)
     actions.resetForm();
   };
   return (
@@ -24,20 +25,21 @@ export const SearchBar = ({ onSubmit }) => {
       validationSchema={ContactShema}
       onSubmit={handleSabmit}
     >
-      <Form className="form">
-        <button type="submit" className="button">
-          <span className="button-label">Search</span>
-        </button>
+      {({ isSubmitting }) => (
+        <Form>
+          <button type="submit" disabled={isSubmitting}>
+            <span>Search</span>
+          </button>
 
-        <Field
-          className="input"
-          name="search"
-          type="text"
-          autoComplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-        />
-      </Form>
+          <Field
+            name="search"
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+          />
+        </Form>
+      )}
     </Formik>
   );
 };

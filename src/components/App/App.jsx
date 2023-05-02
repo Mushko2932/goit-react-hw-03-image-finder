@@ -32,15 +32,20 @@ export class App extends Component {
     }
   }
 
-  componentDidUpdate = (prevProps, prevState) => {
+  async componentDidUpdate(prevProps, prevState) {
     if (
       prevState.search !== this.state.search ||
       prevState.page !== this.state.page
     ) {
-      fetchImgList();
+      // this.setState({isLoading: true, images: []})
+      // fetchImgList();
+      const img = await fetchImgList();
+      this.setState(prevState => ({
+        images: [...prevState.images, img],
+      }));
+      console.log('img :>> ', img);
     }
   }
-  
 
   handleSubmit = search => {
     this.setState({
@@ -55,16 +60,21 @@ export class App extends Component {
 
   loadMore = () => {
     this.setState(prevSt => ({
-      page: prevSt.page + 1, 
+      page: prevSt.page + 1,
     }));
   };
 
-  toggleModal = () => {
-    this.setState(state => ({ showModal: !state.showModal }));
+  toggleModal = (largeImageURL, alt) => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+      largeImageURL,
+      alt,
+    }));
   };
 
   render() {
     const {
+      search,
       isLoading,
       images,
       error,
@@ -83,7 +93,10 @@ export class App extends Component {
         }}
       >
         <SearchBar onSubmit={this.handleSubmit} />
-        <ImageGallery items={images} />
+        {/* {!search && <h2>Please try again</h2>} */}
+        {images && (
+          <ImageGallery items={images} toggleModal={this.toggleModal} />
+        )}
         {isLoading && <Loader />}
         {error && <p>Help...</p>}
         {total / 12 > page && <Button onClick={this.loadMore} />}

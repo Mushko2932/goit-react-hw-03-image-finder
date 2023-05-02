@@ -1,18 +1,23 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
-export const ImageGalleryItem = ({ items }) => {
-  console.log({items});
+export const ImageGalleryItem = ({ items, toggleModal }) => {
   return (
-    <>
-      {items.map(({id, webformatURL, tags}) => (
-        <li key={id} className="gallery-item">
+    <div>
+      {items.map(({ id, webformatURL, largeImageURL, tags }) => (
+        <li
+          key={id}
+          onClick={() => {
+            toggleModal(largeImageURL, tags);
+          }}
+          className="gallery-item"
+        >
           <img src={webformatURL} alt={tags} />
         </li>
       ))}
-    </>
-  )
+    </div>
+  );
 };
 
-// ImageGalleryItem.propTypes = {
-//   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-// };
+ImageGalleryItem.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
