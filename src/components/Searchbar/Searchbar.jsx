@@ -12,11 +12,12 @@ const state = {
   search: '',
 };
 
+
 export const SearchBar = ({ onSubmit }) => {
   const handleSabmit = async (values, actions) => {
     console.log('values :>> ', values);
     await onSubmit(values);
-    actions.setSubmitting(false)
+    actions.setSubmitting(false);
     actions.resetForm();
   };
   return (

@@ -1,4 +1,5 @@
 import { Component } from "react";
+import Notiflix from 'notiflix';
 import { ImageGallery } from "components/ImageGallery/ImageGallery";
 import { SearchBar } from "components/Searchbar/Searchbar";
 import { fetchImgList } from "services/Api";
@@ -16,6 +17,7 @@ export class App extends Component {
     showModal: false,
     error: false,
   };
+
 
   async componentDidMount() {
     try {
@@ -47,8 +49,13 @@ export class App extends Component {
     }
   }
 
+
   handleSubmit = search => {
-    this.setState({
+    if (this.state.search.trim() === '') {
+      Notiflix.Notify.warning('Search field is empty');
+      return;
+    } else {
+      this.setState({
       search,
       images: [],
       page: 1,
@@ -56,6 +63,8 @@ export class App extends Component {
       isLoading: false,
       error: false,
     });
+    }
+    
   };
 
   loadMore = () => {
