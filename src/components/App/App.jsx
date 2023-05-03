@@ -83,7 +83,7 @@ export class App extends Component {
 
   render() {
     const {
-      search,
+      
       isLoading,
       images,
       error,
