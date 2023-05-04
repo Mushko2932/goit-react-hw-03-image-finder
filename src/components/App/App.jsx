@@ -11,7 +11,7 @@ import { Container } from "./App.styled";
 
 export class App extends Component {
   state = {
-    search: '', 
+    search: '',
     images: [],
     page: 1,
     total: 1,
@@ -20,39 +20,36 @@ export class App extends Component {
     error: false,
   };
 
-
-  async componentDidMount() {
-    try {
-      this.setState({ isLoading: true });
-      const fetchedImg = await fetchImgList();
-      this.setState({
-        images: fetchedImg.hits,
-        total: fetchedImg.total,
-        isLoading: false,
-      });
-      // this.setState(prevSt => ({
-      //   page: prevSt.page,
-      //   images: [...prevSt.images, ...fetchedImg.hits],
-      //   total: fetchedImg.total,
-      // }));
-    } catch (error) {
-      console.log('error :>> ', error);
-      this.setState({ error: true, isLoading: false });
-    }
-  }
+  // async componentDidMount(searchQuery) {
+  //   try {
+  //     this.setState({ isLoading: true });
+  //     const fetchedImg = await fetchImgList(searchQuery);
+  //     this.setState({
+  //       images: fetchedImg,
+  //       total: fetchedImg.total,
+  //       isLoading: false,
+  //     });
+  //     console.log('images :>> ', this.state.images);
+  //   } catch (error) {
+  //     console.log('error :>> ', error);
+  //     this.setState({ error: true, isLoading: false });
+  //   }
+  // }
 
   async componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.search !== this.state.search ||
-      prevState.page !== this.state.page
-    ) {
-      // this.setState({isLoading: true, images: []})
-      // fetchImgList();
-      // const img = await fetchImgList();
-      // this.setState(prevState => ({
-      //   images: [...prevState.images, img],
-      // }));
-      // console.log('img :>> ', img);
+    const { images, search, page } = this.state;
+    if (prevState.search !== search || prevState.page !== page) {
+      try {
+        this.setState({ isLoading: true });
+        const fetchImages = await fetchImgList(search, page);
+        this.setState(state => ({
+          images: [...images, ...fetchImages.hits],
+        }));
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.setState({ isLoading: false });
+      }
     }
   }
 
@@ -61,15 +58,15 @@ export class App extends Component {
   //     return;
   // }
 
-  handleSubmit = search => {
-      this.setState({
-      search,
-      images: [],
-      page: 1,
-      total: 1,
-      isLoading: false,
-      error: false,
-    });
+  handleSubmit = value => {
+    try {
+      if (value === this.state.search) {
+        return;
+      }
+      this.setState({ search: value, images: [] });
+    } catch (error) { 
+      console.log('error :>> ', error);
+    }
   };
 
   loadMore = () => {
@@ -88,7 +85,7 @@ export class App extends Component {
 
   render() {
     const {
-      
+      search,
       isLoading,
       images,
       error,
@@ -101,7 +98,7 @@ export class App extends Component {
     return (
       <Container>
         <SearchBar onSubmit={this.handleSubmit} />
-        {/* {!search && <h2>Please try again</h2>} */}
+        {search && <h2>Please try again</h2>}
         {images.length > 0 && (
           <ImageGallery items={images} toggleModal={this.toggleModal} />
         )}

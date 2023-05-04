@@ -1,5 +1,6 @@
+import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Formik, Form, Field, FormBtn, FormLabel } from './SearchBar.styled';
+import { Header, Form, Field, FormBtn, FormLabel } from './SearchBar.styled';
 
 const ContactShema = Yup.object().shape({
   search: Yup.string()
@@ -21,26 +22,28 @@ export const SearchBar = ({ onSubmit }) => {
     actions.resetForm();
   };
   return (
-    <Formik
-      initialValues={state}
-      validationSchema={ContactShema}
-      onSubmit={handleSabmit}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <FormBtn type="submit" disabled={isSubmitting}>
-            <FormLabel>Search</FormLabel>
-          </FormBtn>
+    <Header>
+      <Formik
+        initialValues={state}
+        validationSchema={ContactShema}
+        onSubmit={handleSabmit}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <FormBtn type="submit" disabled={isSubmitting}>
+              <FormLabel>Search</FormLabel>
+            </FormBtn>
 
-          <Field
-            name="search"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-          />
-        </Form>
-      )}
-    </Formik>
+            <Field
+              name="search"
+              type="text"
+              autoComplete="off"
+              autoFocus
+              placeholder="Search images and photos"
+            />
+          </Form>
+        )}
+      </Formik>
+    </Header>
   );
 };
