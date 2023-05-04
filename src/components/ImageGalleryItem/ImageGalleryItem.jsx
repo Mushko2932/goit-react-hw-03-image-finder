@@ -1,20 +1,21 @@
 import PropTypes from 'prop-types';
+import { GalleryItem, GallerImage } from './ImageGalleryItem.styled';
 
 export const ImageGalleryItem = ({ items, toggleModal }) => {
-  console.log(items)
+  console.log(items.id);  
   if (items) {
     return (
       <div>
         {items.map(({ id, webformatURL, largeImageURL, tags }) => (
-          <li
+          <GalleryItem
             key={id}
             onClick={() => {
               toggleModal(largeImageURL, tags);
             }}
             className="gallery-item"
           >
-            <img src={webformatURL} alt={tags} />
-          </li>
+            <GallerImage src={webformatURL} alt={tags} />
+          </GalleryItem>
         ))}
       </div>
     );

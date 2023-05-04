@@ -1,15 +1,17 @@
 import { Component } from "react";
-import Notiflix from 'notiflix';
+// import Notiflix from 'notiflix';
+import { GlobalStyle } from "components/GlobalStyle";
 import { ImageGallery } from "components/ImageGallery/ImageGallery";
 import { SearchBar } from "components/Searchbar/Searchbar";
 import { fetchImgList } from "services/Api";
 import { Loader } from "components/Loader/Loader";
 import { Button } from "components/Button/Button";
 import { Modal } from "components/Modal/Modal";
+import { Container } from "./App.styled";
 
 export class App extends Component {
   state = {
-    search: '',
+    search: '', 
     images: [],
     page: 1,
     total: 1,
@@ -28,6 +30,11 @@ export class App extends Component {
         total: fetchedImg.total,
         isLoading: false,
       });
+      // this.setState(prevSt => ({
+      //   page: prevSt.page,
+      //   images: [...prevSt.images, ...fetchedImg.hits],
+      //   total: fetchedImg.total,
+      // }));
     } catch (error) {
       console.log('error :>> ', error);
       this.setState({ error: true, isLoading: false });
@@ -41,20 +48,20 @@ export class App extends Component {
     ) {
       // this.setState({isLoading: true, images: []})
       // fetchImgList();
-      const img = await fetchImgList();
-      this.setState(prevState => ({
-        images: [...prevState.images, img],
-      }));
-      console.log('img :>> ', img);
+      // const img = await fetchImgList();
+      // this.setState(prevState => ({
+      //   images: [...prevState.images, img],
+      // }));
+      // console.log('img :>> ', img);
     }
   }
 
+  // if (this.state.search.trim() === '') {
+  //     Notiflix.Notify.success('Search field is empty');
+  //     return;
+  // }
 
   handleSubmit = search => {
-    if (this.state.search.trim() === '') {
-      Notiflix.Notify.warning('Search field is empty');
-      return;
-    } else {
       this.setState({
       search,
       images: [],
@@ -63,8 +70,6 @@ export class App extends Component {
       isLoading: false,
       error: false,
     });
-    }
-    
   };
 
   loadMore = () => {
@@ -94,16 +99,10 @@ export class App extends Component {
       page,
     } = this.state;
     return (
-      <div
-        style={{
-          height: '100vh',
-          fontSize: 40,
-          color: '#010101',
-        }}
-      >
+      <Container>
         <SearchBar onSubmit={this.handleSubmit} />
         {/* {!search && <h2>Please try again</h2>} */}
-        {images && (
+        {images.length > 0 && (
           <ImageGallery items={images} toggleModal={this.toggleModal} />
         )}
         {isLoading && <Loader />}
@@ -114,7 +113,8 @@ export class App extends Component {
             <img src={largeImageURL} alt={alt} />
           </Modal>
         )}
-      </div>
+        <GlobalStyle />
+      </Container>
     );
   }
 };

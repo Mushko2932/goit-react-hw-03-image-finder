@@ -1,5 +1,5 @@
-import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import { Formik, Form, Field, FormBtn, FormLabel } from './SearchBar.styled';
 
 const ContactShema = Yup.object().shape({
   search: Yup.string()
@@ -28,9 +28,9 @@ export const SearchBar = ({ onSubmit }) => {
     >
       {({ isSubmitting }) => (
         <Form>
-          <button type="submit" disabled={isSubmitting}>
-            <span>Search</span>
-          </button>
+          <FormBtn type="submit" disabled={isSubmitting}>
+            <FormLabel>Search</FormLabel>
+          </FormBtn>
 
           <Field
             name="search"
