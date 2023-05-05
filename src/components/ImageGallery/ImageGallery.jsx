@@ -2,15 +2,20 @@ import PropTypes from 'prop-types';
 import { ImageGalleryItem } from "components/ImageGalleryItem/ImageGalleryItem";
 import { ImageList } from './ImageGallery.styled';
 
-export const ImageGallery = ({ items, toggleModal }) => {
-  if (items.length > 0) {
-    return (
-      <ImageList className="gallery">
-        <ImageGalleryItem items={items} toggleModal={toggleModal} />
-      </ImageList>
-    );
-  }
-};
+export const ImageGallery = ({ items, toggleModal }) => (
+  <ImageList>
+    {items.map(({ id, webformatURL, largeImageURL, tags }) => (
+      <ImageGalleryItem
+        items={items}
+        toggleModal={toggleModal}
+        key={id}
+        previewURL={webformatURL}
+        photoURL={largeImageURL}
+        alt={tags}
+      ></ImageGalleryItem>
+    ))}
+  </ImageList>
+);
 
 
 ImageGallery.propTypes = {

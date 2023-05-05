@@ -1,5 +1,5 @@
 import { Component } from "react";
-// import Notiflix from 'notiflix';
+import Notiflix from 'notiflix';
 import { GlobalStyle } from "components/GlobalStyle";
 import { ImageGallery } from "components/ImageGallery/ImageGallery";
 import { SearchBar } from "components/Searchbar/Searchbar";
@@ -23,7 +23,7 @@ export class App extends Component {
   // async componentDidMount(searchQuery) {
   //   try {
   //     this.setState({ isLoading: true });
-  //     const fetchedImg = await fetchImgList(searchQuery);
+  //     const fetchedImg = await fetchImgList(search);
   //     this.setState({
   //       images: fetchedImg,
   //       total: fetchedImg.total,
@@ -38,35 +38,38 @@ export class App extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     const { images, search, page } = this.state;
+    
     if (prevState.search !== search || prevState.page !== page) {
       try {
         this.setState({ isLoading: true });
-        const fetchImages = await fetchImgList(search, page);
-        this.setState(state => ({
-          images: [...images, ...fetchImages.hits],
-        }));
+        const fetchedImg = await fetchImgList(search, page);
+        this.setState({
+          images: [...images, ...fetchedImg.hits],
+          total: fetchedImg.total,
+          isLoading: false,
+        });
       } catch (error) {
-        console.log(error);
-      } finally {
-        this.setState({ isLoading: false });
+        console.log('error :>> ', error);
+        this.setState({ error: true, isLoading: false });
       }
     }
   }
 
-  // if (this.state.search.trim() === '') {
-  //     Notiflix.Notify.success('Search field is empty');
-  //     return;
-  // }
+  
 
-  handleSubmit = value => {
-    try {
-      if (value === this.state.search) {
-        return;
-      }
-      this.setState({ search: value, images: [] });
-    } catch (error) { 
-      console.log('error :>> ', error);
+  handleSubmit = searchQuery => {
+    const message = 'Something wrong! Please try again.';
+    if (searchQuery === this.state.search.trim()) {
+      Notiflix.Notify.warning(message);
     }
+      try {
+        if (searchQuery === this.state.search) {
+          return;
+        }
+        this.setState({ search: searchQuery, images: [] });
+      } catch (error) {
+        console.log('error :>> ', error);
+      } 
   };
 
   loadMore = () => {
@@ -85,7 +88,6 @@ export class App extends Component {
 
   render() {
     const {
-      search,
       isLoading,
       images,
       error,
@@ -98,7 +100,7 @@ export class App extends Component {
     return (
       <Container>
         <SearchBar onSubmit={this.handleSubmit} />
-        {search && <h2>Please try again</h2>}
+        {/* {search && <h2>Please try again</h2>} */}
         {images.length > 0 && (
           <ImageGallery items={images} toggleModal={this.toggleModal} />
         )}

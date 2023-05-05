@@ -1,33 +1,20 @@
+import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { Header, Form, Field, FormBtn, FormLabel } from './SearchBar.styled';
-
-const ContactShema = Yup.object().shape({
-  search: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-});
 
 const state = {
   search: '',
 };
 
-
 export const SearchBar = ({ onSubmit }) => {
-  const handleSabmit = async (values, actions) => {
-    console.log('values :>> ', values);
-    await onSubmit(values);
+  const handleSabmit = async (e, actions) => {
+    await onSubmit(e.search);
     actions.setSubmitting(false);
     actions.resetForm();
   };
   return (
     <Header>
-      <Formik
-        initialValues={state}
-        validationSchema={ContactShema}
-        onSubmit={handleSabmit}
-      >
+      <Formik initialValues={state} onSubmit={handleSabmit}>
         {({ isSubmitting }) => (
           <Form>
             <FormBtn type="submit" disabled={isSubmitting}>
@@ -46,4 +33,8 @@ export const SearchBar = ({ onSubmit }) => {
       </Formik>
     </Header>
   );
+};
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };
