@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { GalleryItem, GalleryImage } from './ImageGalleryItem.styled';
 
-export const ImageGalleryItem = ({ items, toggleModal }) => {  
-  const{ largeImageURL, webformatURL, tags } = items;
+export const ImageGalleryItem = ({ item, toggleModal }) => {  
+  const{ largeImageURL, webformatURL, tags } = item; 
   return (
     <GalleryItem
       onClick={() => {
@@ -15,6 +15,8 @@ export const ImageGalleryItem = ({ items, toggleModal }) => {
 };
 
 ImageGalleryItem.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  largeImageURL: PropTypes.string,
+  webformatURL: PropTypes.string,
+  tags: PropTypes.string,
   toggleModal: PropTypes.func.isRequired,
 };

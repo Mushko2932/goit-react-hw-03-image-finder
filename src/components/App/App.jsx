@@ -57,7 +57,7 @@ export class App extends Component {
 
   handleSubmit = searchQuery => {
     const warningMessage = 'Something wrong! Please try again.';
-    if (this.state.search.trim() === '') {
+    if (searchQuery.trim() === '') {
       Notiflix.Notify.warning(warningMessage);
       return;
     }
