@@ -10,7 +10,7 @@ export const ImageGallery = ({ items, toggleModal }) => (
         toggleModal={toggleModal}
         key={id}
         previewURL={webformatURL}
-        photoURL={largeImageURL}
+        imageURL={largeImageURL}
         alt={tags}
       ></ImageGalleryItem>
     ))}

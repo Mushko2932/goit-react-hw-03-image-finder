@@ -55,8 +55,6 @@ export class App extends Component {
     }
   }
 
-  
-
   handleSubmit = searchQuery => {
     const message = 'Something wrong! Please try again.';
     if (searchQuery === this.state.search.trim()) {
@@ -100,7 +98,6 @@ export class App extends Component {
     return (
       <Container>
         <SearchBar onSubmit={this.handleSubmit} />
-        {/* {search && <h2>Please try again</h2>} */}
         {images.length > 0 && (
           <ImageGallery items={images} toggleModal={this.toggleModal} />
         )}
