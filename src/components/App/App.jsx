@@ -20,22 +20,6 @@ export class App extends Component {
     error: false,
   };
 
-  // async componentDidMount(searchQuery) {
-  //   try {
-  //     this.setState({ isLoading: true });
-  //     const fetchedImg = await fetchImgList(search);
-  //     this.setState({
-  //       images: fetchedImg,
-  //       total: fetchedImg.total,
-  //       isLoading: false,
-  //     });
-  //     console.log('images :>> ', this.state.images);
-  //   } catch (error) {
-  //     console.log('error :>> ', error);
-  //     this.setState({ error: true, isLoading: false });
-  //   }
-  // }
-
   async componentDidUpdate(prevProps, prevState) {
     const { images, search, page } = this.state;
     
@@ -43,11 +27,12 @@ export class App extends Component {
       try {
         this.setState({ isLoading: true });
         const fetchedImg = await fetchImgList(search, page);
-        this.setState({
+        this.setState(prevState => ({
           images: [...images, ...fetchedImg.hits],
+          page: prevState.page,
           total: fetchedImg.total,
           isLoading: false,
-        });
+        }));
       } catch (error) {
         console.log('error :>> ', error);
         this.setState({ error: true, isLoading: false });
@@ -65,15 +50,15 @@ export class App extends Component {
         if (searchQuery === this.state.search) {
           return;
         }
-        this.setState({ search: searchQuery, images: [] });
+        this.setState({ search: searchQuery, page: 1, images: [] });
       } catch (error) {
         console.log('error :>> ', error);
       } 
   };
 
   loadMore = () => {
-    this.setState(prevSt => ({
-      page: prevSt.page + 1,
+    this.setState(prevState => ({
+      page: prevState.page + 1,
     }));
   };
 
